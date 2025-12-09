@@ -2,7 +2,7 @@
 import AddTask from './AddTask.vue'
 </script>
 <template>
-  <div class="border-b-2 border-b-gray-100 p-5">
+  <div class="border-b-2 border-b-gray-200 p-5 mb-5">
     <div class="container flex justify-between">
       <!-- title -->
       <div>
