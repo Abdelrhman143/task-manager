@@ -3,7 +3,7 @@ import TaskCard from './TaskCard.vue'
 </script>
 
 <template>
-  <ul class="space-y-5 my-10">
+  <ul class="space-y-5 pb-10">
     <TaskCard />
     <TaskCard />
     <TaskCard />
