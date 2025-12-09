@@ -1,7 +1,8 @@
+@import 'primeicons/primeicons.css';
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&: is(.dark *));
 
 @utility container {
   width: 90%;
