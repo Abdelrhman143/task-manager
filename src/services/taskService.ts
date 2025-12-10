@@ -10,7 +10,6 @@ export const taskService = {
       .from('tasks')
       .select('*')
       .order('created_at', { ascending: false })
-    console.log('data coming from supabase in service', data)
 
     if (error) {
       throw new Error(error.message)

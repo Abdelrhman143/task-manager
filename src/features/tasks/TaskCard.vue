@@ -16,7 +16,11 @@ defineProps<{
       <!-- text -->
       <h3 class="text-lg font-semibold">{{ task.title }}</h3>
       <p class="text-gray-500 mb-4 mt-1 text-sm">
-        {{ task.description || 'no description avilable' }}
+        {{
+          task.description && task.description.length > 120
+            ? task.description?.substring(0, 120) + '.......'
+            : task.description || 'no description available'
+        }}
       </p>
       <!-- flags -->
       <div class="flex gap-2 items-center">
