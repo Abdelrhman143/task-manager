@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import AddTask from './AddTask.vue'
+import AddTask from '../tasks/AddTask.vue'
 </script>
 <template>
   <div class="border-b-2 border-b-gray-200 p-5 mb-5">

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import TaskActions from '@/components/TaskActions.vue'
-import TaskDetails from '@/components/TaskDetails.vue'
+import TaskActions from '@/features/tasks/TaskActions.vue'
+import TaskDetails from '@/features/tasks/TaskDetails.vue'
 import { Button } from '@/components/ui/button'
 </script>
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import CategoriesFilter from '../components/CategoriesFilter.vue'
-import ProgressBar from '../components/ProgressBar.vue'
-import TasksList from '../components/TasksList.vue'
+import CategoriesFilter from '../features/categories/CategoriesFilter.vue'
+import ProgressBar from '../features/tasks/ProgressBar.vue'
+import TasksList from '../features/tasks/TasksList.vue'
 </script>
 
 <template>
