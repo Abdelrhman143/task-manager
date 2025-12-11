@@ -72,11 +72,11 @@ const handleSubmit = async (e: Event) => {
       priority: priority.value,
       due_date: dueDate.value || new Date().toISOString(),
     }
-    console.log('task data before if', taskData)
+
     if (props.action === 'add') {
       // Add new task
       await taskStore.addTask(taskData)
-      console.log('Task added!')
+
       // Refresh the tasks list
       await taskStore.fetchTasks(true)
     } else if (props.action === 'edit' && props.task) {

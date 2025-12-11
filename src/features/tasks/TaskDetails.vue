@@ -30,7 +30,6 @@ onMounted(async () => {
   const fetchedCategory = await categoryStore.fetchCategoryById(fetchedTask.category_id)
   currentTask.value = fetchedTask
   currentCategory.value = fetchedCategory
-  console.log('fetchedCategory in copm', currentCategory.value?.name)
 })
 watch(
   () => taskStore.tasks.find((t) => t.id === taskId),

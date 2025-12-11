@@ -78,7 +78,7 @@ export const useTaskStore = defineStore('tasks', () => {
     error.value = null
     try {
       const newTask = await taskService.addTask(taskData)
-      console.log('new task in store', newTask)
+
       return newTask
     } catch (err) {
       error.value = err instanceof Error ? err.message : 'Failed to add new task'

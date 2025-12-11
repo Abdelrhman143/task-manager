@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabaseClient'
+import { apiRequest } from '@/lib/apiClient'
 import type { GetTasksOptions, TaskRequest, TaskResponse } from '../types/task'
 
 // service contain all CRUD operation of Tasks
@@ -8,81 +8,86 @@ export const taskService = {
   async getTasks(options?: GetTasksOptions) {
     const { limit = 20, offset = 0, categoryId } = options || {}
 
-    // get tasks based on page
-    let query = supabase
-      .from('tasks')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .range(offset, offset + limit - 1)
+    // Build query parameters
+    const params = new URLSearchParams()
+    params.append('order', 'created_at.desc')
 
-    // if we have category search for task that equal this category
+    // Add category filter if provided
     if (categoryId !== undefined && categoryId !== null) {
-      query = query.eq('category_id', categoryId)
-    }
-    const { data, error } = await query
-    if (error) {
-      throw new Error(error.message)
+      params.append('category_id', `eq.${categoryId}`)
     }
 
-    return data as TaskResponse[]
+    const queryString = params.toString()
+    const endpoint = `/tasks${queryString ? `?${queryString}` : ''}`
+
+    const data = await apiRequest<TaskResponse[]>(endpoint, {
+      method: 'GET',
+    })
+
+    // Handle pagination manually (since REST API doesn't have range())
+    // Return sliced results based on offset and limit
+    return data.slice(offset, offset + limit)
   },
+
   // fetch singleTask data
   async getTaskById(id: number) {
-    const { data, error } = await supabase.from('tasks').select('*').eq('id', id).single()
-    if (error) {
-      throw new Error(error.message)
+    const data = await apiRequest<TaskResponse[]>(`/tasks?id=eq.${id}`, {
+      method: 'GET',
+    })
+
+    if (!data || data.length === 0) {
+      throw new Error(`Task with id ${id} not found`)
     }
-    console.log('data of single task', data)
-    return data as TaskResponse
+
+    return data[0] as TaskResponse
   },
 
   // add task to database
   async addTask(taskData: TaskRequest) {
-    const { data, error } = await supabase.from('tasks').insert([taskData]).select().single()
-    if (error) {
-      throw new Error(error.message)
+    const data = await apiRequest<TaskResponse[]>(`/tasks`, {
+      method: 'POST',
+      body: JSON.stringify(taskData),
+    })
+
+    if (!data || data.length === 0) {
+      throw new Error('Failed to create task')
     }
 
-    return data as TaskResponse
+    return data[0] as TaskResponse
   },
+
   // Update an existing task
   async updateTask(id: number, taskData: Partial<TaskRequest>) {
-    const { data, error } = await supabase
-      .from('tasks')
-      .update(taskData)
-      .eq('id', id)
-      .select()
-      .single()
+    const data = await apiRequest<TaskResponse[]>(`/tasks?id=eq.${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(taskData),
+    })
 
-    if (error) {
-      throw new Error(error.message)
+    if (!data || data.length === 0) {
+      throw new Error(`Task with id ${id} not found`)
     }
 
-    return data as TaskResponse
+    return data[0] as TaskResponse
   },
 
   // Mark task as complete/incomplete
   async markTaskComplete(id: number, completed: boolean) {
-    const { data, error } = await supabase
-      .from('tasks')
-      .update({ completed })
-      .eq('id', id)
-      .select()
-      .single()
+    const data = await apiRequest<TaskResponse[]>(`/tasks?id=eq.${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ completed }),
+    })
 
-    if (error) {
-      throw new Error(error.message)
+    if (!data || data.length === 0) {
+      throw new Error(`Task with id ${id} not found`)
     }
 
-    return data as TaskResponse
+    return data[0] as TaskResponse
   },
 
   // Delete a task
   async deleteTask(id: number) {
-    const { error } = await supabase.from('tasks').delete().eq('id', id)
-
-    if (error) {
-      throw new Error(error.message)
-    }
+    await apiRequest(`/tasks?id=eq.${id}`, {
+      method: 'DELETE',
+    })
   },
 }

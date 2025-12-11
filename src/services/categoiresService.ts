@@ -1,24 +1,26 @@
-import { supabase } from '@/lib/supabaseClient'
+import { apiRequest } from '@/lib/apiClient'
 import type { Category } from '@/types/category'
 
 export const categoryService = {
   // fetch all categories
   async getCategories() {
-    const { data, error } = await supabase.from('categories').select('*')
+    const data = await apiRequest<Category[]>(`/categories?order=name.asc`, {
+      method: 'GET',
+    })
 
-    if (error) {
-      throw new Error(error.message)
-    }
-    return data as Category[]
+    return data
   },
 
   // fetch single category
   async getCategoryById(id: number) {
-    const { data, error } = await supabase.from('categories').select('*').eq('id', id).single()
+    const data = await apiRequest<Category[]>(`/categories?id=eq.${id}`, {
+      method: 'GET',
+    })
 
-    if (error) {
-      throw new Error(error.message)
+    if (!data || data.length === 0) {
+      throw new Error(`Category with id ${id} not found`)
     }
-    return data as Category
+
+    return data[0] as Category
   },
 }
