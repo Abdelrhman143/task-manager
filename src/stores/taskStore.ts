@@ -87,6 +87,46 @@ export const useTaskStore = defineStore('tasks', () => {
     }
   }
 
+  // Update an existing task
+  const updateTask = async (id: number, taskData: Partial<TaskRequest>) => {
+    isLoading.value = true
+    error.value = null
+    try {
+      const updatedTask = await taskService.updateTask(id, taskData)
+      // Update the task in the list
+      const index = tasks.value.findIndex((t) => t.id === id)
+      if (index !== -1) {
+        tasks.value[index] = updatedTask
+      }
+      return updatedTask
+    } catch (err) {
+      error.value = err instanceof Error ? err.message : 'Failed to update task'
+      throw err
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  // Mark task as complete the same logic of update but we update the boolean
+  const markTaskComplete = async (id: number, completed: boolean) => {
+    isLoading.value = true
+    error.value = null
+    try {
+      const updatedTask = await taskService.markTaskComplete(id, completed)
+      // Update the task in the list
+      const index = tasks.value.findIndex((t) => t.id === id)
+      if (index !== -1) {
+        tasks.value[index] = updatedTask
+      }
+      return updatedTask
+    } catch (err) {
+      error.value = err instanceof Error ? err.message : 'Failed to update task'
+      throw err
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   return {
     tasks,
     isLoading,
@@ -97,6 +137,8 @@ export const useTaskStore = defineStore('tasks', () => {
     fetchTaskById,
     fetchTasks,
     fetchMoreTasks,
+    updateTask,
+    markTaskComplete,
     selectedCategory,
   }
 })

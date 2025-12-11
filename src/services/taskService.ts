@@ -45,4 +45,35 @@ export const taskService = {
 
     return data as TaskResponse
   },
+  // Update an existing task
+  async updateTask(id: number, taskData: Partial<TaskRequest>) {
+    const { data, error } = await supabase
+      .from('tasks')
+      .update(taskData)
+      .eq('id', id)
+      .select()
+      .single()
+
+    if (error) {
+      throw new Error(error.message)
+    }
+
+    return data as TaskResponse
+  },
+
+  // Mark task as complete/incomplete
+  async markTaskComplete(id: number, completed: boolean) {
+    const { data, error } = await supabase
+      .from('tasks')
+      .update({ completed })
+      .eq('id', id)
+      .select()
+      .single()
+
+    if (error) {
+      throw new Error(error.message)
+    }
+
+    return data as TaskResponse
+  },
 }

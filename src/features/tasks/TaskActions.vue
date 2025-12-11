@@ -11,12 +11,28 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import AddAndEditTask from './AddAndEditTask.vue'
+import type { TaskResponse } from '@/types/task'
+import { useRoute } from 'vue-router'
+import { useTaskStore } from '@/stores/taskStore'
+import { onMounted, ref } from 'vue'
+
+const route = useRoute()
+const taskId = Number(route.params.id)
+const taskStore = useTaskStore()
+const task = ref<TaskResponse>()
+
+onMounted(async () => {
+  const fetchedTask = await taskStore.fetchTaskById(taskId)
+  if (fetchedTask) {
+    task.value = fetchedTask
+  }
+})
 </script>
 
 <template>
   <div class="flex">
     <!-- edit the task -->
-    <AddAndEditTask action="edit" />
+    <AddAndEditTask action="edit" v-if="task" :task="task" />
     <!-- delete the task -->
     <div>
       <AlertDialog>

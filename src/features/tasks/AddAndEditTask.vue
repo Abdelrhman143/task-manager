@@ -23,12 +23,13 @@ import {
 } from '@/components/ui/select'
 import { useCategoryStore } from '@/stores/categoryStore'
 import { useTaskStore } from '@/stores/taskStore'
-import type { TaskRequest } from '@/types/task'
+import type { TaskRequest, TaskResponse } from '@/types/task'
 import { storeToRefs } from 'pinia'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 
 const props = defineProps<{
   action: 'add' | 'edit'
+  task?: TaskResponse
 }>()
 
 // state to manage the form
@@ -73,16 +74,16 @@ const handleSubmit = async (e: Event) => {
     }
     console.log('task data before if', taskData)
     if (props.action === 'add') {
-      // Add new task (like calling API in React)
+      // Add new task
       await taskStore.addTask(taskData)
       console.log('Task added!')
       // Refresh the tasks list
       await taskStore.fetchTasks(true)
-      // } else if (props.action === 'edit' && props.task) {
-      // // Update existing task
-      // await taskStore.updateTask(props.task.id, taskData)
-      // // Refresh the tasks list
-      // await taskStore.fetchTasks(true)
+    } else if (props.action === 'edit' && props.task) {
+      // Update existing task
+      await taskStore.updateTask(props.task.id, taskData)
+      // Refresh the tasks list
+      await taskStore.fetchTasks(true)
     }
 
     // Close dialog and reset form
@@ -97,6 +98,21 @@ const handleSubmit = async (e: Event) => {
 onMounted(async () => {
   await categoryStore.fetchCategories()
 })
+
+watch(
+  () => props.task,
+  (task) => {
+    if (task && props.action === 'edit') {
+      title.value = task.title
+      description.value = task.description || ''
+      categoryId.value = task.category_id
+      priority.value = task.priority
+
+      dueDate.value = task.due_date ? String(task.due_date.split('T')[0]) : ''
+    }
+  },
+  { immediate: true },
+)
 </script>
 <template>
   <Dialog v-model:open="isOpen">
