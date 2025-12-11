@@ -204,7 +204,7 @@ watch(
           <DialogClose as-child>
             <Button variant="outline"> Cancel </Button>
           </DialogClose>
-          <Button type="submit">Add</Button>
+          <Button type="submit">submit</Button>
         </DialogFooter>
       </form>
     </DialogContent>

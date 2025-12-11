@@ -27,6 +27,11 @@ onMounted(async () => {
     task.value = fetchedTask
   }
 })
+
+// Handle delete the task
+const handleDelete = async () => {
+  console.log('Delete task:', taskId)
+}
 </script>
 
 <template>

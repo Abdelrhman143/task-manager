@@ -3,12 +3,12 @@ import { useCategoryStore } from '@/stores/categoryStore'
 import { useTaskStore } from '@/stores/taskStore'
 
 import { storeToRefs } from 'pinia'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import LoadingSpinner from '../common/LoadingSpinner.vue'
 import type { TaskResponse } from '@/types/task'
 import type { Category } from '@/types/category'
-import MarKComplete from './MarKComplete.vue'
+import MarkComplete from './MarkComplete.vue'
 
 // bring the taskId from url
 const route = useRoute()
@@ -32,13 +32,23 @@ onMounted(async () => {
   currentCategory.value = fetchedCategory
   console.log('fetchedCategory in copm', currentCategory.value?.name)
 })
+watch(
+  () => taskStore.tasks.find((t) => t.id === taskId),
+  (updatedTask) => {
+    if (updatedTask && currentTask.value) {
+      currentTask.value = updatedTask
+    }
+  },
+)
 </script>
 
 <template>
   <LoadingSpinner v-if="isLoading" />
   <div v-else class="bg-white border border-gray-300 rounded-lg p-10">
     <!-- make complete button -->
-    <div class="flex items-center gap-2"><MarKComplete /> <span>Mark as complete</span></div>
+    <div class="flex items-center gap-2" v-if="currentTask">
+      <MarkComplete :task="currentTask" /> <span>Mark as complete</span>
+    </div>
     <div>
       <img
         :src="currentTask?.image_url"

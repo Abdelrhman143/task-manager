@@ -4,7 +4,8 @@ import type { Category } from '@/types/category'
 import type { TaskResponse } from '@/types/task'
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import MarKComplete from './MarKComplete.vue'
+
+import MarkComplete from './MarkComplete.vue'
 
 const props = defineProps<{
   task: TaskResponse
@@ -26,9 +27,10 @@ const handleNavegateToTask = (taskId: number) => {
 
 <template>
   <div
+    :style="{ borderLeftColor: task.completed ? 'green' : 'blue' }"
     class="flex gap-5 bg-white border border-gray-200 border-l-8 border-l-blue-600 rounded-lg p-5 hover:scale-[1.03] transition hover:shadow-lg cursor-pointer"
   >
-    <MarKComplete />
+    <MarkComplete :task="task" />
     <li @click="handleNavegateToTask(task.id)" :key="task.id" class="w-full">
       <div>
         <!-- text -->
