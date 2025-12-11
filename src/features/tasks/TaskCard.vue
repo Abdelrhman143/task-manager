@@ -1,9 +1,16 @@
 <script setup lang="ts">
+import { useCategoryStore } from '@/stores/categoryStore'
 import type { TaskResponse } from '@/types/task'
+import { storeToRefs } from 'pinia'
 
-defineProps<{
+const props = defineProps<{
   task: TaskResponse
 }>()
+
+const store = useCategoryStore()
+const { categories } = storeToRefs(store)
+
+const category = categories.value.find((cat) => cat.id === props.task.category_id)
 </script>
 
 <template>
@@ -26,7 +33,7 @@ defineProps<{
       <div class="flex gap-2 items-center">
         <!-- type flag -->
         <div class="flex gap-2 items-center rounded-xl px-2 bg-blue-200 text-sm text-blue-700">
-          <i class="pi pi-briefcase"></i> <span>{{ task.category_id }}</span>
+          <i class="pi pi-briefcase"></i> <span>{{ category?.name }}</span>
         </div>
         <!-- prority flag -->
         <div class="bg-red-600/20 px-2 flex gap-2 items-center rounded-xl text-red-900 text-sm">

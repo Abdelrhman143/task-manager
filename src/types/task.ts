@@ -14,3 +14,9 @@ export interface TaskResponse extends TaskRequest {
   updated_at: string
   image_url: string
 }
+
+export interface GetTasksOptions {
+  limit?: number
+  offset?: number
+  categoryId?: number | null
+}
