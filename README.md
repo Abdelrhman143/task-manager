@@ -248,10 +248,10 @@ src/
 
 _Screenshots of key screens should be added here:_
 
-- Task List View with category filtering
-- Add/Edit Task Form
-- Task Detail View
-- Mobile responsive views
+![Task List View with category filtering](./public/1.png)
+![Add/Edit Task Form](./public/3.png)
+![Task Detail View](./public/2.png)
+![Mobile responsive views](./public/4.png)
 
 ## 🛠️ Tech Stack
 
@@ -261,8 +261,8 @@ _Screenshots of key screens should be added here:_
 - **TypeScript 5.9.0** - Type safety
 - **Vite 7.2.4** - Build tool and dev server
 - **Tailwind CSS 4.1.17** - Utility-first CSS framework
-- **Reka UI 2.6.1** - UI component primitives
-- **Lucide Vue Next** - Icon library
+- **shadcn lib** - UI library
+- **primevue** - Icon library
 
 ## 📝 Scripts
 
