@@ -12,10 +12,11 @@ import {
 } from '@/components/ui/alert-dialog'
 import AddAndEditTask from './AddAndEditTask.vue'
 import type { TaskResponse } from '@/types/task'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useTaskStore } from '@/stores/taskStore'
 import { onMounted, ref } from 'vue'
 
+const router = useRouter()
 const route = useRoute()
 const taskId = Number(route.params.id)
 const taskStore = useTaskStore()
@@ -30,7 +31,13 @@ onMounted(async () => {
 
 // Handle delete the task
 const handleDelete = async () => {
-  console.log('Delete task:', taskId)
+  try {
+    await taskStore.deleteTask(taskId)
+    // go back to home after successful deletion
+    router.push({ name: 'home' })
+  } catch (error) {
+    console.error('Failed to delete task:', error)
+  }
 }
 </script>
 
@@ -55,7 +62,7 @@ const handleDelete = async () => {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction>Continue</AlertDialogAction>
+            <AlertDialogAction @click="handleDelete">delete</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

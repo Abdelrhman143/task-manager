@@ -127,6 +127,22 @@ export const useTaskStore = defineStore('tasks', () => {
     }
   }
 
+  // Delete a task
+  const deleteTask = async (id: number) => {
+    isLoading.value = true
+    error.value = null
+    try {
+      await taskService.deleteTask(id)
+      // Remove the task from the list
+      tasks.value = tasks.value.filter((t) => t.id !== id)
+    } catch (err) {
+      error.value = err instanceof Error ? err.message : 'Failed to delete task'
+      throw err
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   return {
     tasks,
     isLoading,
@@ -139,6 +155,7 @@ export const useTaskStore = defineStore('tasks', () => {
     fetchMoreTasks,
     updateTask,
     markTaskComplete,
+    deleteTask,
     selectedCategory,
   }
 })

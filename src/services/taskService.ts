@@ -76,4 +76,13 @@ export const taskService = {
 
     return data as TaskResponse
   },
+
+  // Delete a task
+  async deleteTask(id: number) {
+    const { error } = await supabase.from('tasks').delete().eq('id', id)
+
+    if (error) {
+      throw new Error(error.message)
+    }
+  },
 }
