@@ -56,12 +56,30 @@ export const useTaskStore = defineStore('tasks', () => {
     selectedCategoryId.value = categoryId
     await fetchTasks(true) // go to rest and set it to true this will triger a rest
   }
+
+  // bring the task by id coming from url
+  const fetchTaskById = async (id: number) => {
+    isLoading.value = true
+    error.value = null
+
+    try {
+      const task = await taskService.getTaskById(id)
+      console.log('task in store', task)
+      return task
+    } catch (err) {
+      error.value = err instanceof Error ? err.message : 'Failed to load task'
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   return {
     tasks,
     isLoading,
     error,
     hasMore,
     selectedCategoryId,
+    fetchTaskById,
     fetchTasks,
     fetchMoreTasks,
     selectedCategory,

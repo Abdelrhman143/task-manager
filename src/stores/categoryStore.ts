@@ -23,7 +23,22 @@ export const useCategoryStore = defineStore('categories', () => {
       isLoading.value = false
     }
   }
+  const fetchCategoryById = async (id: number) => {
+    isLoading.value = true
+    error.value = null
+
+    try {
+      const category = await categoryService.getCategoryById(id)
+      console.log('category in store', category)
+      return category
+    } catch (err) {
+      error.value = err instanceof Error ? err.message : 'Failed to load category'
+    } finally {
+      isLoading.value = false
+    }
+  }
   return {
+    fetchCategoryById,
     fetchCategories,
     categories,
     isLoading,

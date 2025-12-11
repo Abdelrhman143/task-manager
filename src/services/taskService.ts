@@ -26,4 +26,13 @@ export const taskService = {
 
     return data as TaskResponse[]
   },
+  // fetch singleTask data
+  async getTaskById(id: number) {
+    const { data, error } = await supabase.from('tasks').select('*').eq('id', id).single()
+    if (error) {
+      throw new Error(error.message)
+    }
+    console.log('data of single task', data)
+    return data as TaskResponse
+  },
 }

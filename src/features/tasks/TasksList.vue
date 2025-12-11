@@ -8,7 +8,7 @@ import Button from '@/components/ui/button/Button.vue'
 
 const store = useTaskStore()
 const { tasks, isLoading, error, hasMore } = storeToRefs(store)
-
+console.log('tasks', tasks)
 onMounted(() => {
   store.fetchTasks()
 })

@@ -1,20 +1,32 @@
 <script setup lang="ts">
 import { useCategoryStore } from '@/stores/categoryStore'
+import type { Category } from '@/types/category'
 import type { TaskResponse } from '@/types/task'
-import { storeToRefs } from 'pinia'
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 
 const props = defineProps<{
   task: TaskResponse
 }>()
+const router = useRouter()
+const categoryStore = useCategoryStore()
 
-const store = useCategoryStore()
-const { categories } = storeToRefs(store)
+const taskCategory = ref<Category>()
 
-const category = categories.value.find((cat) => cat.id === props.task.category_id)
+onMounted(async () => {
+  const fetchedCategory = await categoryStore.fetchCategoryById(props.task.category_id)
+  taskCategory.value = fetchedCategory
+})
+
+const handleNavegateToTask = (taskId: number) => {
+  router.push({ name: 'task', params: { id: taskId } })
+}
 </script>
 
 <template>
   <li
+    @click="handleNavegateToTask(task.id)"
+    :key="task.id"
     class="flex gap-5 bg-white border border-gray-200 border-l-8 border-l-blue-600 rounded-lg p-5 hover:scale-[1.03] transition hover:shadow-lg cursor-pointer"
   >
     <!-- checkbox -->
@@ -33,7 +45,7 @@ const category = categories.value.find((cat) => cat.id === props.task.category_i
       <div class="flex gap-2 items-center">
         <!-- type flag -->
         <div class="flex gap-2 items-center rounded-xl px-2 bg-blue-200 text-sm text-blue-700">
-          <i class="pi pi-briefcase"></i> <span>{{ category?.name }}</span>
+          <i class="pi pi-briefcase"></i> <span>{{ taskCategory?.name }}</span>
         </div>
         <!-- prority flag -->
         <div class="bg-red-600/20 px-2 flex gap-2 items-center rounded-xl text-red-900 text-sm">
