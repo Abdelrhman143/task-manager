@@ -8,6 +8,7 @@ import { useRoute } from 'vue-router'
 import LoadingSpinner from '../common/LoadingSpinner.vue'
 import type { TaskResponse } from '@/types/task'
 import type { Category } from '@/types/category'
+import MarKComplete from './MarKComplete.vue'
 
 // bring the taskId from url
 const route = useRoute()
@@ -37,12 +38,7 @@ onMounted(async () => {
   <LoadingSpinner v-if="isLoading" />
   <div v-else class="bg-white border border-gray-300 rounded-lg p-10">
     <!-- make complete button -->
-    <label
-      class="bg-gray-100 w-full space-x-4 p-4 flex items-center hover:border-blue-500 transition cursor-pointer border"
-    >
-      <input type="checkbox" class="size-6" />
-      <span class="text-sm">mark as complete</span>
-    </label>
+    <div class="flex items-center gap-2"><MarKComplete /> <span>Mark as complete</span></div>
     <div>
       <img
         :src="currentTask?.image_url"

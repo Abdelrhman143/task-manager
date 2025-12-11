@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { taskService } from '@/services/taskService'
-import type { TaskResponse } from '@/types/task'
+import type { TaskRequest, TaskResponse } from '@/types/task'
 
 export const useTaskStore = defineStore('tasks', () => {
   // states
@@ -64,10 +64,24 @@ export const useTaskStore = defineStore('tasks', () => {
 
     try {
       const task = await taskService.getTaskById(id)
-      console.log('task in store', task)
       return task
     } catch (err) {
       error.value = err instanceof Error ? err.message : 'Failed to load task'
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  // send the data we recive from the from to the service
+  const addTask = async (taskData: TaskRequest) => {
+    isLoading.value = true
+    error.value = null
+    try {
+      const newTask = await taskService.addTask(taskData)
+      console.log('new task in store', newTask)
+      return newTask
+    } catch (err) {
+      error.value = err instanceof Error ? err.message : 'Failed to add new task'
     } finally {
       isLoading.value = false
     }
@@ -79,6 +93,7 @@ export const useTaskStore = defineStore('tasks', () => {
     error,
     hasMore,
     selectedCategoryId,
+    addTask,
     fetchTaskById,
     fetchTasks,
     fetchMoreTasks,

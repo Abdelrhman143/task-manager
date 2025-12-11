@@ -1,5 +1,5 @@
 import { supabase } from '@/lib/supabaseClient'
-import type { GetTasksOptions, TaskResponse } from '../types/task'
+import type { GetTasksOptions, TaskRequest, TaskResponse } from '../types/task'
 
 // service contain all CRUD operation of Tasks
 
@@ -33,6 +33,16 @@ export const taskService = {
       throw new Error(error.message)
     }
     console.log('data of single task', data)
+    return data as TaskResponse
+  },
+
+  // add task to database
+  async addTask(taskData: TaskRequest) {
+    const { data, error } = await supabase.from('tasks').insert([taskData]).select().single()
+    if (error) {
+      throw new Error(error.message)
+    }
+
     return data as TaskResponse
   },
 }

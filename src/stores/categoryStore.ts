@@ -29,7 +29,7 @@ export const useCategoryStore = defineStore('categories', () => {
 
     try {
       const category = await categoryService.getCategoryById(id)
-      console.log('category in store', category)
+
       return category
     } catch (err) {
       error.value = err instanceof Error ? err.message : 'Failed to load category'

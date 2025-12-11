@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import AddTask from '../tasks/AddTask.vue'
+import AddAndEditTask from '../tasks/AddAndEditTask.vue'
 </script>
 <template>
   <div class="border-b-2 border-b-gray-200 p-5 mb-5">
@@ -10,7 +10,7 @@ import AddTask from '../tasks/AddTask.vue'
         <p class="text-gray-600">1 of 5 tasks completed</p>
       </div>
       <!-- add task -->
-      <AddTask />
+      <AddAndEditTask action="add" />
     </div>
   </div>
 </template>
